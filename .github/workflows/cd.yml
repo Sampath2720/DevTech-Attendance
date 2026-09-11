@@ -4,14 +4,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-secrets:
+  ssh-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Verify Secrets
-        run: |
-          echo "VM_HOST found"
-          echo "VM_USER found"
-        env:
-          VM_HOST: ${{ secrets.VM_HOST }}
-          VM_USER: ${{ secrets.VM_USER }}
+      - name: SSH Test
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            hostname
+            whoami

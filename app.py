@@ -1,15 +1,72 @@
-return f"""
+from flask import Flask, request
+
+app = Flask(__name__)
+
+employees = {
+    "sampath": {
+        "id": "EMP001",
+        "doj": "15-Feb-2022",
+        "experience": "4 Years",
+        "domain": "Linux / DevOps"
+    },
+    "ram": {
+        "id": "EMP002",
+        "doj": "10-Jun-2021",
+        "experience": "5 Years",
+        "domain": "Windows Admin"
+    },
+    "jay": {
+        "id": "EMP003",
+        "doj": "05-Jan-2023",
+        "experience": "3 Years",
+        "domain": "Cloud Engineer"
+    },
+    "ayyapa": {
+        "id": "EMP004",
+        "doj": "20-Mar-2022",
+        "experience": "4 Years",
+        "domain": "DevOps Engineer"
+    },
+    "siva": {
+        "id": "EMP005",
+        "doj": "11-Nov-2020",
+        "experience": "6 Years",
+        "domain": "Linux Administrator"
+    }
+}
+
+@app.route("/")
+def home():
+
+    name = request.args.get("name", "").lower()
+
+    result = ""
+
+    if name in employees:
+        emp = employees[name]
+
+        result = f"""
+        <div class="employee-card">
+            <h2>Employee Details</h2>
+            <p><b>Employee ID:</b> {emp['id']}</p>
+            <p><b>Date Of Joining:</b> {emp['doj']}</p>
+            <p><b>Experience:</b> {emp['experience']}</p>
+            <p><b>Domain:</b> {emp['domain']}</p>
+        </div>
+        """
+
+    return f"""
 <!DOCTYPE html>
 <html>
 <head>
-<title>DevTech Attendance Portal</title>
+<title>DevTech Employee Portal</title>
 
 <style>
 
 body {{
     margin:0;
-    font-family:Segoe UI, sans-serif;
-    background:#eef4ff;
+    font-family:'Segoe UI',sans-serif;
+    background:#eef3ff;
 }}
 
 .header {{
@@ -18,109 +75,86 @@ body {{
     padding:20px;
     display:flex;
     justify-content:space-between;
-    align-items:center;
-}}
-
-.header h1 {{
-    margin:0;
 }}
 
 .sidebar {{
     position:fixed;
-    top:80px;
+    top:78px;
     left:0;
-    width:240px;
+    width:220px;
     height:100%;
-    background:#0b1f59;
+    background:#081f5c;
     color:white;
-    padding-top:20px;
 }}
 
-.sidebar a {{
-    display:block;
-    color:white;
-    padding:15px 25px;
-    text-decoration:none;
+.sidebar ul {{
+    list-style:none;
+    padding:0;
 }}
 
-.sidebar a:hover {{
-    background:#3f51ff;
+.sidebar li {{
+    padding:18px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
 }}
 
 .main {{
-    margin-left:260px;
+    margin-left:240px;
     padding:30px;
+}}
+
+.cards {{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
 }}
 
 .card {{
     background:white;
-    padding:25px;
-    border-radius:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom:20px;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
 }}
 
-.grid {{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:20px;
+.card h2 {{
+    margin:0;
+    color:#005bea;
 }}
 
-input, select {{
-    width:100%;
+.search {{
+    margin-top:30px;
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 4px 10px rgba(0,0,0,.1);
+}}
+
+input[type=text] {{
+    width:70%;
     padding:12px;
     border:1px solid #ccc;
-    border-radius:10px;
+    border-radius:8px;
 }}
 
 button {{
-    background:linear-gradient(90deg,#0099ff,#7a3cff);
+    background:#005bea;
     color:white;
     border:none;
-    padding:15px;
-    width:100%;
-    border-radius:12px;
-    font-size:18px;
+    padding:12px 25px;
+    border-radius:8px;
     cursor:pointer;
 }}
 
-.stats {{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
+button:hover {{
+    background:#0040b3;
 }}
 
-.stat-box {{
-    background:white;
-    text-align:center;
+.employee-card {{
+    margin-top:20px;
+    background:#f7faff;
+    border-left:5px solid #005bea;
     padding:20px;
-    border-radius:15px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}}
-
-.present {{
-    border-left:5px solid green;
-}}
-
-.absent {{
-    border-left:5px solid red;
-}}
-
-.total {{
-    border-left:5px solid blue;
-}}
-
-.rate {{
-    border-left:5px solid purple;
-}}
-
-.search-box {{
-    display:flex;
-    gap:10px;
-}}
-
-.search-box input {{
-    flex:1;
+    border-radius:10px;
 }}
 
 </style>
@@ -129,120 +163,63 @@ button {{
 <body>
 
 <div class="header">
-    <h1>🚀 DevTech Attendance Portal</h1>
-    <h2>Version 6.0</h2>
+    <h1>🚀 DevTech Employee Portal</h1>
+    <h2>Version 7.0</h2>
 </div>
 
 <div class="sidebar">
-    #🏠 Dashboard</a>
-    #📅 Attendance</a>
-    #👨‍💼 Employees</a>
-    #📊 Reports</a>
-    #⚙ Settings</a>
-    #🚪 Logout</a>
+<ul>
+<li>🏠 Dashboard</li>
+<li>👨 Employees</li>
+<li>📅 Attendance</li>
+<li>📊 Reports</li>
+<li>⚙ Settings</li>
+</ul>
 </div>
 
 <div class="main">
 
-<div class="stats">
+<div class="cards">
 
-<div class="stat-box present">
-<h2>24</h2>
-<p>Present</p>
-</div>
-
-<div class="stat-box absent">
-<h2>6</h2>
-<p>Absent</p>
-</div>
-
-<div class="stat-box total">
-<h2>30</h2>
+<div class="card">
+<h2>5</h2>
 <p>Total Employees</p>
 </div>
 
-<div class="stat-box rate">
+<div class="card">
+<h2>4</h2>
+<p>Present</p>
+</div>
+
+<div class="card">
+<h2>1</h2>
+<p>Absent</p>
+</div>
+
+<div class="card">
 <h2>80%</h2>
 <p>Attendance Rate</p>
 </div>
 
 </div>
 
-<br>
+<div class="search">
 
-<div class="card">
-
-<h2>🔍 Employee Search</h2>
+<h2>Employee Search</h2>
 
 <form method="get">
 
-<div class="search-box">
-
-<input
-type="text"
+<input type="text"
 name="name"
-placeholder="Enter Sampath, Ram, Jay, Ayyapa or Siva">
+placeholder="Search Sampath, Ram, Jay, Ayyapa or Siva">
 
 <button type="submit">
 Search
 </button>
 
-</div>
-
 </form>
 
-<br>
-
 {result}
-
-</div>
-
-<div class="card">
-
-<h2>📝 Mark Attendance</h2>
-
-<div class="grid">
-
-<div>
-<label>Employee ID</label>
-<input type="text" placeholder="EMP001">
-</div>
-
-<div>
-<label>Employee Name</label>
-<input type="text" placeholder="Sampath">
-</div>
-
-<div>
-<label>Domain</label>
-<select>
-<option>Linux Admin</option>
-<option>Windows Admin</option>
-<option>Cloud Engineer</option>
-<option>DevOps Engineer</option>
-</select>
-</div>
-
-<div>
-<label>Date</label>
-<input type="date">
-</div>
-
-</div>
-
-<br>
-
-<label>Status</label><br><br>
-
-<input type="radio" name="status"> Present
-&nbsp;&nbsp;&nbsp;
-<input type="radio" name="status"> Absent
-
-<br><br>
-
-<button>
-Submit Attendance
-</button>
 
 </div>
 
@@ -251,3 +228,6 @@ Submit Attendance
 </body>
 </html>
 """
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

@@ -1,45 +1,43 @@
-from flask import Flask
+from flask import Flask, request
 
 app = Flask(__name__)
 
+employees = {
+    "sampath": {"id":"EMP001","doj":"15-Feb-2022","experience":"4 Years","domain":"Linux / DevOps"},
+    "ram": {"id":"EMP002","doj":"10-Jun-2021","experience":"5 Years","domain":"Windows Admin"},
+    "jay": {"id":"EMP003","doj":"05-Jan-2023","experience":"3 Years","domain":"Cloud Engineer"},
+    "ayyapa": {"id":"EMP004","doj":"20-Mar-2022","experience":"4 Years","domain":"DevOps Engineer"},
+    "siva": {"id":"EMP005","doj":"11-Nov-2020","experience":"6 Years","domain":"Linux Admin"}
+}
+
 @app.route("/")
 def home():
-    return """
+    name = request.args.get("name", "").lower()
+
+    result = ""
+
+    if name in employees:
+        emp = employees[name]
+        result = f"""
+        <h2>Employee Details</h2>
+        <p><b>Employee ID:</b> {emp['id']}</p>
+        <p><b>Date of Joining:</b> {emp['doj']}</p>
+        <p><b>Experience:</b> {emp['experience']}</p>
+        <p><b>Domain:</b> {emp['domain']}</p>
+        """
+
+    return f"""
     <html>
-    <head>
-        <title>DevTech Attendance Portal</title>
-    </head>
-    <body style="font-family:Arial;padding:30px">
+    <body style="font-family:Arial;text-align:center">
+        <h1>DevTech Employee Portal</h1>
+        <h3>Version 6.0</h3>
 
-        <h1>DevTech Attendance Portal</h1>
-        <h3>Version 5.0</h3>
-
-        <form>
-            <label>Employee ID</label><br>
-            <input type="text"><br><br>
-
-            <label>Employee Name</label><br>
-            <input type="text"><br><br>
-
-            <label>Domain</label><br>
-            <select>
-                <option>Linux Admin</option>
-                <option>Windows Admin</option>
-                <option>Cloud Engineer</option>
-                <option>DevOps Engineer</option>
-            </select><br><br>
-
-            <label>Date</label><br>
-            <input type="date"><br><br>
-
-            <label>Status</label><br>
-            <input type="radio" name="status"> Present
-            <input type="radio" name="status"> Absent
-            <br><br>
-
-            <button type="submit">Submit Attendance</button>
+        <form method="get">
+            <input type="text" name="name" placeholder="Enter Employee Name">
+            <button type="submit">Search</button>
         </form>
 
+        {result}
     </body>
     </html>
     """

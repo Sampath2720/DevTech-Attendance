@@ -163,7 +163,7 @@ button:hover {{
 <body>
 
 <div class="header">
-    <h1>🚀 DevTech Employee Portal</h1>
+    <h1>🚀 Coro infotech Employee Portal</h1>
     <h2>Version 7.0</h2>
 </div>
 

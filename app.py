@@ -59,7 +59,7 @@ def home():
 <!DOCTYPE html>
 <html>
 <head>
-<title>DevTech Employee Portal</title>
+<title>Employee Portal</title>
 
 <style>
 

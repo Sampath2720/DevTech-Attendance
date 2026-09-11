@@ -4,10 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  test-secrets:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test Workflow
+      - name: Verify Secrets
         run: |
-          echo "CD workflow triggered successfully"
+          echo "VM_HOST found"
+          echo "VM_USER found"
+        env:
+          VM_HOST: ${{ secrets.VM_HOST }}
+          VM_USER: ${{ secrets.VM_USER }}

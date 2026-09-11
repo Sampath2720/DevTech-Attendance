@@ -8,7 +8,7 @@ def home():
     <html>
     <body style="font-family:Arial;text-align:center">
     <h1>DevTech Attendance Portal</h1>
-    <h3>Version 3.0</h3>
+    <h3>Version 4.0</h3>
     <p>CI Pipeline Successfully Implemented</p>
     <p>Hosted on Azure VM using Docker</p>
     </body>
